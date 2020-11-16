@@ -12,7 +12,7 @@ Luciano Luca Fabbri Soto-Aguilar
 
 ###### © 2020 Luciano Luca Fabbri Soto-Aguilar
 
-#### [Explora el código>>](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Capital%20Structure%20Determinants.ipynb)
+#### [Explora el código>>](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/challenge.ipynb)
 
 <br/><br/>
 
@@ -79,7 +79,7 @@ El modelo posee un rendimiento deficiente en un porcentaje mínimo de observacio
 |R<sup>2</sup> testeo, ex-post|0.90|
 |MAPE entrenamiento|2.37|
 |MAPE entrenamiento con remoción del 1% de los *outliers*|0.35|1, si el período t corresponde al séptimo día de la semana, 0 en otro caso|
-|MAPE testeo, ex-post|0.6|
+|MAPE testeo, ex-post|0.60|
 |MAPE testeo, ex-post con remoción del 1% de *outliers*|0.41|
 
 
@@ -101,3 +101,6 @@ Para ejemplificar la aplicación real del modelo propuesto, en la Figura 2 se mu
 
 
 
+## **2.   Conclusiones**
+
+Para concluir, el análisis realizado y el modelo propuesto no logran dar respuestas definitivas sobre el impacto de las promociones en las ventas debido a la ausencia de detalles técnicos sobre éstas. Por otra parte, el modelo formulado logró un ajuste satisfactorio generalizando de forma correcta las tendencias temporales de las ventas independientemente de la cadena comercial en cuestión o si el período es promocional o no, sin embargo, mostró un desempeño deficiente para un número reducido de observaciones por lo que se considera necesario analizar las posibles causas para la evaluación de acciones correctivas a futuro. Junto con esto el modelo permite el pronóstico de ventas negativas, principalmente en escenarios en donde la venta real fue igual a cero lo que puede ser corregido sin mayores esfuerzos en siguientes iteraciones. Finalmente, el modelo presenta un desempeño de pronóstico adecuado para horizontes de pronóstico menores a 18 días, lo que lo hace bastante robusto para mercados que presenten un abastecimiento de frecuente de productos. Debido al deterioro en desempeño luego del horizonte de pronóstico anteriormente mencionado se considera relevante analizar a futuro tanto la influencia de la propagación de los errores secuenciales como el efecto cíclico de las ventas en el deterioro de la calidad del pronóstico.
