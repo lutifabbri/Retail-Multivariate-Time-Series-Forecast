@@ -61,84 +61,39 @@ El modelo propuesto es el siguiente:
 
 Donde f(X) es la función desconocida estimada utilizando XGBoost, θ es el vector de hiperparámetros correspondiente que parametriza al modelo XGBoost, Z<sub>i</sub> es la matriz de covariables de efectos aleatorios b<sub>i</sub> es el vector de efectos aleatorios para el producto i y ϵ<sub>ijt</sub> el error aleatorio.
 
+*2.3   Evaluación del Modelo*
 
+SEl desempeño del modelo fue medido de tres formas; desempeño del pronóstico en los datos de entrenamiento (abril-octubre 2019), en los datos de testeo ex-post (diciembre 2019) y en los datos de testeo ex-ante (diciembre 2019). La diferencia entre las metodologías ex-post y ex-ante, es que la primera hace el pronóstico de los datos de diciembre 2019 con los valores correctos de las ventas rezagadas, mientras que el pronóstico ex-ante corresponde a un pronóstico secuencial. Debido a la forma en la que se formuló el modelo (autorregresivo hasta 7 días), para simular un escenario real de aplicación se debe pronosticar un único día en el futuro y luego utilizar este pronóstico como el valor autorregresivo de primer orden en el segundo día y así sucesivamente. Debido a que los errores se comienzan a propagar en el futuro, se estima que mientras mayor sea el horizonte de pronóstico, menor será el desempeño del modelo. Visto de otra perspectiva, el desempeño ex-post correspondería a un desempeño real en caso de que sólo se realicen pronósticos de un día en el futuro, mientras que el desempeño ex-ante sería una aplicación más probable en donde el modelo se utiliza para hacer el pronóstico de las ventas a lo largo de un horizonte de múltiples días en el futuro.
 
-Sequential approach:
+El modelo posee un rendimiento deficiente en un porcentaje mínimo de observaciones a las que se les denominó outliers, lo que se ve reflejado en el aumento sustancial en el MAPE al filtrar el 1% de los errores de mayor magnitud relativa (ver Tabla 2). Son outliers en términos del pronóstico, no necesariamente de acuerdo con la distribución de la serie a la que pertenece esa observación. Se recomienda explorar estos puntos de bajo rendimiento en el futuro para así elaborar acciones correctivas; ya sea mediante un ajuste del modelo a datos filtrados de outliers o incorporación de variables o transformaciones de variables explicativas que puedan hacerlo robusto a estos escenarios
+
 <br/><br/>
-![Formulation1](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Dataset%20Images/Formulation1%20formula.png)
+##### *Tabla 2. Métricas de desempeño*
+|Métrica|Valor|
+|:-------|:-----------|
+|R<sup>2</sup> entrenamiento|0.90|	
+|R<sup>2</sup> testeo, ex-post|0.90|
+|MAPE entrenamiento|2.37|
+|MAPE entrenamiento con remoción del 1% de los *outliers*|0.35|1, si el período t corresponde al séptimo día de la semana, 0 en otro caso|
+|MAPE testeo, ex-post|0.6|
+|MAPE testeo, ex-post con remoción del 1% de *outliers*|0.41|
 
-Static approach:
-<br/><br/>
-![Formulation2](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Dataset%20Images/Formulation2%20formula.png)
 
-
-Where f(X) is the unknown function estimated using an XGBoost, Br<sub>it</sub>, Ch<sub>it</sub>, Mx<sub>it</sub>, Pe<sub>it</sub> are dichotomic variables that indicate the country of headquarters of each firm, θ is the corresponding hyperparameter vector that parameterizes XGBoost models, Z<sub>i</sub> is the covariate matrix of random effects, b<sub>i</sub> is the vector of random effects for company i ,  and ϵ<sub>it</sub> is the random error term. [SHAP Values](https://github.com/slundberg/shap#citations) were used to interpret the results of each model. The computing of this values does not consider firm-specific effects on leverage, leaving only the fixed effects of the corresponding explanatory variables which facilitates the exploration of  ‘pure’ effects of capital structure determinants within the framework of the objectives of this work.
-
-The sequential formulation enabled to examine a more continuous variation of the effects of the different variables on leverage, however, a drawback in terms of interpretability is introduced because of the repetition of each variable caused by the lagged effect. The effects on firm leverage of each financial explanatory variable were plotted in a 3d graph with dimensions of variable value, year of the corresponding model and impact on firm leverage. On the other hand, formulation two only enables to plot 2d plots for each macro time period. Lastly the effects of each variable and formulation were compared according to the estimated effect on leverage according to the different capital structure theories and between the two formulations.
-
-
-## **3.   Results**
-
-An increase in model performance is achieved by including random firm effects which indicates the existence of non-negligible random effects. In other words, individual/internal firm factors have strong effects on leverage, which could be due to internal company policies or stakeholder management preferences. In terms of training and testing accuracy the sequential formulation shows satisfactory performance (see Figure 1), achieving an R2 testing score over 0.77 for 75% of the models and a minimum R2 training score of 0.96. Similarly, the static formulation also achieved satisfactory performance, with an average training and testing R2 score of 0.94 and 0.77, respectively. Respect to the performance of the models, it is possible to observe a positive trend between number of training data on the performance of the model in unobserved data (see Figure 1). It is possible to assume that obtaining new or more observations could result in an increase in performance. However, considering that the only way that the author of this project has to increase the volume of data is by imputing missing data under some criteria, and given the complex nature of the data used (panel data - time series for each variable per company) it is estimated that the use of any imputation technique could result in the addition of unnecessary noise instead of rich and meaningful information to explain firm leverage.
-
-![Combined figure](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Dataset%20Images/Combined.png)
-
-##### *Figure 1. Training samples and test score & R2 train/test KDE Joint distribution – Sequential Formulation.*
 <br/><br/>
 
 
+Por otra parte, el modelo obtuvo un R^2 y un MAPE fuera de muestra ex-post de 0.9 y 60% respectivamente, valores de R^2 fuera de muestra superiores al 0.8 para todos los horizontes de pronóstico menores a 30 días y valores MAPE en torno al 20% para horizontes de pronóstico menores a 18 días (ver Figura 1). Por otra parte, se observa que la distribución del error porcentual absoluto es muy similar entre las cadenas comerciales y entre períodos normales y en promoción, por lo que es posible afirmar que el modelo logra generalizar de forma adecuada las tendencias temporales independientemente de las cadenas y si está en promoción o no. Analizando el pronóstico del modelo por cada serie se identifica que éste pronostica ventas negativas, particularmente cuando las ventas reales fueron iguales a cero. Para trabajos próximos se propone evaluar diferentes técnicas para forzar al modelo a un pronóstico positivo. Para esto se estima que una programación manual del output del modelo podría ser suficiente para escenarios como este.
 
-In aggregate terms the static and sequential formulations achieved practically equal performance. However, because changes in the effects of different variables on total firm leverage might occur in short time spans (few samples with altered behavior), this could possibly have non-significant influence in the performance metric (R2 score). This phenomenon of short time span changes in effect of variables could not possibly be detected by the static model formulation and would not be reflected in the aggregate performance of the model. Because of this, is encouraged to use both model formulations with these considerations in mind to get accurate inferences about the impact and change of different firm characteristics on total leverage. 
+![Out-of-sample performance metrics](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Out-of-sample_performance_metrics_vs_forecast_horizon.png)
 
-In terms of the effects of the different variables on firm leverage: for the sequential formulation, independent of the lag of the variable, the effect on leverage is the same, and both formulations show the same trend effects of each variable on firm leverage. It is encouraged to the reader to check the SHAP plots in this repository and to use the plotting tool in the notebook to explore interactively the effects of the different variables and how they vary across time (see gif 1).
-
-![gif](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Variable%20effects%20-%20gifs/Formulation4%20-%20Total%20leverage%20-%20Liquidity%20-%20lag1.gif)
-##### *Gif 1. Surface fitting to SHAP Values and crisis period display - Liquidity - lag1.*
+##### *Figure 1. Sensibilidad de las métricas de desempeño fuera de muestra respecto al horizonte de pronóstico.*
 <br/><br/>
 
-From both model formulations, the following results are obtained; liquidity and firm size indicators are those that explain, on average, the highest proportion of firm leverage.  On the other hand, all variables presented both positive and negative effects on leverage depending on the value of the indicator and none presented an effect that could have been considered linear. The trends presented are sufficiently similar between periods to consider that the global financial crisis did not have a significant effect on the effect of the different financial indicators on the leverage of the companies.
-
-Considering the expected effects of each variable according to Zeitun et. al. (2017), the results suggest that one theory is not predominant over another because the effect of the different determinants of the capital structure can be positive or negative depending on the values they take. However, it is possible to suggest that one theory better explains the capital structure for certain types of firms better than the other. In this way,  and in general terms, for larger and unprofitable companies, the Trade-off theory explains in a better way the debt structure of firms and the Pecking Order theory better explains the capital structure of smaller, more profitable, less tangible and more liquid firms.
-
-## **4.   References**
-
-[1] 	S. Pepur, M. Ćurak y K. Poposki, «Corporate capital structure: the case of large Croatian companies,» Economic research-Ekonomska istraživanja, pp. 498-514, 2016.
-
-[2] 	S. Valcacer, H. J. de Moura, D. F. Lopes y V. A. Sobreiro, «Capital structure management differences in Latin American and US firms after 2008 crisis,» Journal of Economics, 2017.
-
-[3] 	B. Harrison y T. W. Widjaja, «The determinants of capital structure: Comparison between before and after financial crisis,» Economic Issues, pp. 55-80, 2014.
-
-[4] 	S. Myers, «Capital Structure Puzzle,» National Bureau of Economic Research, 1984.
-
-[5] 	S. C. Myers y N. S. Majluf, «Corporate Financing and Investment Decisions When Firms Have InformationThat Investors Do Not Have,» National Bureau of Economic Research, 1984.
-
-[6] 	P. Proença, R. M. S. Laureano y L. M. S. Laureano, «Determinants of capital structure and the 2008 financial crisis: evidence from Portuguese SMEs.,» Procedia-Social and Behavioral Sciences, pp. 182-191, 2014.
-
-[7] 	R. Zeitun, A. Temimi y K. Mimounu, «Do financial crises alter the dynamics of corporate capital structure? Evidence from GCC countries.,» The Quarterly Review of Economics and Finance, pp. 21-33, 2017.
-
-[8] 	S. Vodwal, V. Bansal y P. Sinha, «Impact of Financial Crisis on Determinants of Capital Structure of Indian Non-financial Firms: Estimating Dynamic Panel Data Model using Two-Step System GMM.,» Munich Personal RePEc Archive, 2019.
-
-[9] 	S. Beyer, «Capital Structure of German publicly listed Firms: Evidence from the Financial Crisis. (Tesis de Licenciatura, University of Twente),» 2018.
-
-[10] 	A. Iqbal y O. Kume, «Impact of financial crisis on firms’ capital structure in UK, France, and Germany,» Multinational Finance Journal, pp. 249-280, 2014.
-
-[11] 	T. H. Trinh y N. T. Phuong, «Effects of financial crisis on capital structure of listed firms in Vietnam,» International Journal of Financial Research, pp. 66-74, 2016.
-
-[12] 	J. Jermias y F. Yigit, «Factors affecting leverage during a financial crisis: Evidence from Turkey,» Borsa Istanbul Review, pp. 171-185, 2018. 
-
-## **5.   Apendix**
-**Appendix 1**: Impact of the different capital structure determinants on firm leverage according to static and sequential formulations. Pre-crisis, crisis, post-crisis estimated effects for the static formulation are first presented followed by a fixed view of the effects of the corresponding variable for the sequential formulation.
-
-![Appendix1](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Dataset%20Images/Appendix1.png)
-
-**Appendix 2**: Fixed views of the capital structure determinants are displayed to analyze the variation of their effect on firm leverage in the 2008 global financial crisis which is marked by two red planes.
-
-![Appendix2](https://github.com/lutifabbri/Capital-Structure-Determinants/blob/main/Dataset%20Images/Appendix2.png)
 
 
+Para ejemplificar la aplicación real del modelo propuesto, en la Figura 2 se muestra el pronóstico completo del mes de diciembre de 2019. Cabe recalcar que el modelo fue entrenado con datos desde abril a octubre, por lo que este pronóstico es fuera de muestra. La imagen refleja lo expresado en el gráfico de sensibilidad de desempeño en función del horizonte de pronóstico: a partir del día 17, la calidad del ajuste secuencial (ex-ante) sufre un deterioro significativo. El autor considera relevante analizar a futuro tanto la influencia de la propagación de los errores secuenciales como el efecto cíclico de las ventas en el deterioro de la calidad del pronóstico. De todas maneras, una buena alternativa para la utilización de este modelo en el pronóstico real de ventas sería limitar el horizonte de pronóstico a 17 días o menos.
 
-
-
+![out-of-sample forecast](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Out-of-sample%20model%20performance/Raw%20series/individual%20serie2%2C6.png)
 
 
 
