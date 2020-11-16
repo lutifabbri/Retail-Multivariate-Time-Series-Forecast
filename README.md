@@ -1,4 +1,4 @@
-# Evaluation of the 2008 Global Financial Crisis Impact on Corporate Capital Structure Determinants of Publicly Listed Latin American Firms Through the Use of Machine Learning Tools
+# Elaboración de un modelo de pronóstico de ventas de productos de retail – Teamcore
 
 Luciano Luca Fabbri Soto-Aguilar
 <br/><br/>
@@ -57,7 +57,7 @@ Considerando lo anterior se propone utilizar un
 
 El modelo propuesto es el siguiente:
 
-IMAGEN
+![model formulation](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Formulaci%C3%B3n_modelo.PNG)
 
 Donde f(X) es la función desconocida estimada utilizando XGBoost, θ es el vector de hiperparámetros correspondiente que parametriza al modelo XGBoost, Z<sub>i</sub> es la matriz de covariables de efectos aleatorios b<sub>i</sub> es el vector de efectos aleatorios para el producto i y ϵ<sub>ijt</sub> el error aleatorio.
 
