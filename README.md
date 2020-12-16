@@ -1,4 +1,4 @@
-# Elaboración de un modelo de pronóstico de ventas de productos de retail – Teamcore
+# Elaboración de un modelo de pronóstico de ventas de productos de retail para el soporte de desiciones estratégicas y el análisis del impacto promocional
 
 Luciano Luca Fabbri Soto-Aguilar
 <br/><br/>
