@@ -12,7 +12,7 @@ Luciano Luca Fabbri Soto-Aguilar
 
 ###### © 2020 Luciano Luca Fabbri Soto-Aguilar
 
-#### [Explora el código>>](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/challenge.ipynb)
+#### [Explora el código>>](https://github.com/lutifabbri/Retail-Multivariate-Time-Series-Forecast/blob/main/Files/challenge.ipynb)
 
 <br/><br/>
 
@@ -61,7 +61,7 @@ Considerando lo anterior se propone utilizar un
 
 El modelo propuesto es el siguiente:
 
-![model formulation](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Formulaci%C3%B3n_modelo.PNG)
+![model formulation](https://github.com/lutifabbri/Retail-Multivariate-Time-Series-Forecast/blob/main/Files/Formulaci%C3%B3n_modelo.PNG)
 
 Donde f(X) es la función desconocida estimada utilizando XGBoost, θ es el vector de hiperparámetros correspondiente que parametriza al modelo XGBoost, Z<sub>i</sub> es la matriz de covariables de efectos aleatorios b<sub>i</sub> es el vector de efectos aleatorios para el producto i y ϵ<sub>ijt</sub> el error aleatorio.
 
@@ -88,7 +88,7 @@ El modelo posee un rendimiento deficiente en un porcentaje mínimo de observacio
 
 Por otra parte, el modelo obtuvo un R<sup>2</sup> y un MAPE fuera de muestra ex-post de 0.9 y 60% respectivamente, valores de R<sup>2</sup> fuera de muestra superiores al 0.8 para todos los horizontes de pronóstico menores a 30 días y valores MAPE en torno al 20% para horizontes de pronóstico menores a 18 días (ver Figura 1). Por otra parte, se observa que la distribución del error porcentual absoluto es muy similar entre las cadenas comerciales y entre períodos normales y en promoción, por lo que es posible afirmar que el modelo logra generalizar de forma adecuada las tendencias temporales independientemente de las cadenas y si está en promoción o no. Analizando el pronóstico del modelo por cada serie se identifica que éste pronostica ventas negativas, particularmente cuando las ventas reales fueron iguales a cero. Para trabajos próximos se propone evaluar diferentes técnicas para forzar al modelo a un pronóstico positivo. Para esto se estima que una programación manual del output del modelo podría ser suficiente para escenarios como este.
 
-![Out-of-sample performance metrics](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Out-of-sample_performance_metrics_vs_forecast_horizon.png)
+![Out-of-sample performance metrics](https://github.com/lutifabbri/Retail-Multivariate-Time-Series-Forecast/blob/main/Files/Out-of-sample_performance_metrics_vs_forecast_horizon.png)
 
 ##### *Figura 1. Sensibilidad de las métricas de desempeño fuera de muestra respecto al horizonte de pronóstico.*
 <br/><br/>
@@ -97,7 +97,7 @@ Por otra parte, el modelo obtuvo un R<sup>2</sup> y un MAPE fuera de muestra ex-
 
 Para ejemplificar la aplicación real del modelo propuesto, en la Figura 2 se muestra el pronóstico completo del mes de diciembre de 2019. Cabe recalcar que el modelo fue entrenado con datos desde abril a octubre, por lo que este pronóstico es fuera de muestra. La imagen refleja lo expresado en el gráfico de sensibilidad de desempeño en función del horizonte de pronóstico: a partir del día 18, la calidad del ajuste secuencial (ex-ante) sufre un deterioro significativo. El autor considera relevante analizar a futuro tanto la influencia de la propagación de los errores secuenciales como el efecto cíclico de las ventas en el deterioro de la calidad del pronóstico. De todas maneras, una buena alternativa para la utilización de este modelo en el pronóstico real de ventas sería limitar el horizonte de pronóstico a 18 días o menos.
 
-![out-of-sample forecast](https://github.com/lutifabbri/Teamcore-Challenge/blob/main/Out-of-sample%20model%20performance/Raw%20series/individual%20serie2%2C6.png)
+![out-of-sample forecast](https://github.com/lutifabbri/Retail-Multivariate-Time-Series-Forecast/blob/main/Files/Out-of-sample%20model%20performance/Raw%20series/individual%20serie220%2C6.png)
 
 ##### *Figura 2. Pronóstico fuera de muestra del modelo propuesto.*
 
